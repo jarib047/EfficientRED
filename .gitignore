@@ -1,0 +1,5 @@
+__pycache__/
+data/
+results*/
+e2e*/
+evaluate/
