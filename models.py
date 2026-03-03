@@ -40,8 +40,12 @@ class RED(nn.Module):
         hidden_states = hidden_states_og * self.red["scaling_var"]
         hidden_states = hidden_states + self.red["bias_var"]
         if self.param_mask_list is not None:
-            # print(self.layer_idx, self.param_mask_list)
-            param_mask = self.param_mask_list[self.layer_idx]
+            if torch.is_tensor(self.param_mask_list):
+                param_mask = self.param_mask_list if self.param_mask_list.ndim == 1 else self.param_mask_list[self.layer_idx]
+            else:
+                param_mask = self.param_mask_list[self.layer_idx]
+            # Ensure mask broadcasts and computes safely with current activation tensor.
+            param_mask = param_mask.to(device=hidden_states.device, dtype=hidden_states.dtype)
             hidden_states_masked = hidden_states * param_mask
             hidden_states_og_non_essential = hidden_states_og * (1-param_mask)
             return hidden_states_masked + hidden_states_og_non_essential
