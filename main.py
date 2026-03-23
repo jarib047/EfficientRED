@@ -25,7 +25,8 @@ training_epoch_dict = {"cola": 40,
                        "mnli": 20,
                        "qnli": 20,
                        "rte": 40,
-                       "wnli":40}
+                    #    "wnli":40
+                       }
 
 metric_map = {
     "cola": "matthews_correlation",
@@ -36,7 +37,7 @@ metric_map = {
     "rte": "accuracy",
     "sst2": "accuracy",
     "stsb": "pearson",
-    "wnli": "accuracy"
+    # "wnli": "accuracy"
 }
 
 
@@ -44,7 +45,7 @@ def main(model_name="roberta-base", task="cola", prune_layers=True, prune_parame
          seed=101, layer_tau=0.5, param_tau=0.5, save_result=True, only_prune=False, generalization=False, dsets=[],
          proportional_prune=False):
     print("\n\n-----------------------------")
-    print(f"{model_name}-{task}\nPruning: {prune_layers} for epochs: {prune_epochs}\nTraining for {10 if test_run else training_epoch_dict[task]} epochs\nSave results: {save_result}")
+    print(f"{model_name}-{task}\nPruning: {prune_layers} for epochs: {prune_epochs}\nTraining for {1 if test_run else training_epoch_dict[task]} epochs\nSave results: {save_result}")
     print("-----------------------------")
     # data_download()
 
@@ -106,7 +107,7 @@ def main(model_name="roberta-base", task="cola", prune_layers=True, prune_parame
         print("-----------------XXX---------------------\n")
         return ""
 
-    num_epochs = 10 if test_run else training_epoch_dict[task]
+    num_epochs = 1 if test_run else training_epoch_dict[task]
     total_train_steps = len(train_dataloader)*num_epochs
     warmup_rate = 0.06
     optimizer = torch.optim.Adam(model.parameters(),
